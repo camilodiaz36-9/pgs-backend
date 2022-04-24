@@ -2,10 +2,13 @@ package co.edu.udistrital.esping.pgs.api.clients.service.impl
 
 import co.edu.udistrital.esping.pgs.api.clients.dto.ClientDTO
 import co.edu.udistrital.esping.pgs.api.clients.model.Client
+import co.edu.udistrital.esping.pgs.api.clients.model.User
 import co.edu.udistrital.esping.pgs.api.clients.repository.ClientRepository
 import co.edu.udistrital.esping.pgs.api.clients.service.ClientService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 @Service
 class ClientServiceImpl : ClientService {
@@ -21,29 +24,28 @@ class ClientServiceImpl : ClientService {
         return entityToDTO(clientInserted)
     }
 
-    override fun updateClient(client: ClientDTO): ClientDTO? {
-        val foundClient = client.id?.let { clientRepository.findById(it) }
+    override fun updateClient(client: ClientDTO, id: Int): ClientDTO? {
+        val foundClient = clientRepository.findById(id)
 
-        if (foundClient != null) {
-            if (foundClient.isPresent) {
-                val clientEntity = foundClient.get()
+        if (foundClient.isPresent) {
+            val clientEntity = foundClient.get()
 
-                clientEntity.id = client.id
-                clientEntity.documentType = client.documentType
-                clientEntity.clientName = client.clientName
-                clientEntity.address = client.address
-                clientEntity.phone = client.phone
-                clientEntity.lastVisited = client.lastVisited
-                clientEntity.discount = client.discount
-                clientEntity.pendingForPayment = client.pendingForPayment
-                clientEntity.city = client.city
+            clientEntity.id = id
+            clientEntity.clientNumber = client.clientNumber
+            clientEntity.documentType = client.documentType
+            clientEntity.clientName = client.clientName
+            clientEntity.lastVisited = client.lastVisited?.toInstant(ZoneOffset.UTC)
+            clientEntity.discount = client.discount
+            clientEntity.pendingPayment = client.pendingForPayment
 
-                val clientUpdated = clientRepository.save(clientEntity)
+            val userEntity = User()
+            userEntity.id = client.user
 
-                return entityToDTO(clientUpdated)
-            } else {
-                return null
-            }
+            clientEntity.user = userEntity
+
+            val clientUpdated = clientRepository.save(clientEntity)
+
+            return entityToDTO(clientUpdated)
         } else {
             return null
         }
@@ -80,41 +82,40 @@ class ClientServiceImpl : ClientService {
 
     fun entityToDTO(clientEntity: Client): ClientDTO {
         val id = clientEntity.id
+        val clientNumber = clientEntity.clientNumber
         val documentType = clientEntity.documentType
         val clientName = clientEntity.clientName
-        val address = clientEntity.address
-        val phone = clientEntity.phone
-        val lastVisited = clientEntity.lastVisited
+        val lastVisited = LocalDateTime.ofInstant(clientEntity.lastVisited, ZoneOffset.UTC)
         val discount = clientEntity.discount
-        val pendingForPayment = clientEntity.pendingForPayment
-        val city = clientEntity.city
+        val pendingForPayment = clientEntity.pendingPayment
+        val user = clientEntity.user?.id
 
         return ClientDTO(
-            id, documentType, clientName, address, phone, lastVisited, discount, pendingForPayment, city
+            id, clientNumber, documentType, clientName, lastVisited, discount, pendingForPayment, user
         )
     }
 
     fun dtoToEntity(clientDTO: ClientDTO): Client {
-        val id = clientDTO.id
+        val clientNumber = clientDTO.clientNumber
         val documentType = clientDTO.documentType
         val clientName = clientDTO.clientName
-        val address = clientDTO.address
-        val phone = clientDTO.phone
         val lastVisited = clientDTO.lastVisited
         val discount = clientDTO.discount
         val pendingForPayment = clientDTO.pendingForPayment
-        val city = clientDTO.city
+        val user = clientDTO.user
 
         val clientEntity = Client()
-        clientEntity.id = id
+        clientEntity.clientNumber = clientNumber
         clientEntity.documentType = documentType
         clientEntity.clientName = clientName
-        clientEntity.address = address
-        clientEntity.phone = phone
-        clientEntity.lastVisited = lastVisited
+        clientEntity.lastVisited = lastVisited?.toInstant(ZoneOffset.UTC)
         clientEntity.discount = discount
-        clientEntity.pendingForPayment = pendingForPayment
-        clientEntity.city = city
+        clientEntity.pendingPayment = pendingForPayment
+
+        val userEntity = User()
+        userEntity.id = user
+
+        clientEntity.user = userEntity
 
         return clientEntity
     }
