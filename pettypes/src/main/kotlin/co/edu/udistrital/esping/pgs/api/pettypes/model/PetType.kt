@@ -1,6 +1,12 @@
 package co.edu.udistrital.esping.pgs.api.pettypes.model
 
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.Lob
+import javax.persistence.Table
 
 @Entity
 @Table(name = "pet_types")
@@ -13,7 +19,4 @@ open class PetType {
     @Lob
     @Column(name = "name", nullable = false)
     open var name: String? = null
-
-    @OneToMany(mappedBy = "idPetType")
-    open var petBreeds: MutableSet<PetBreed> = mutableSetOf()
 }

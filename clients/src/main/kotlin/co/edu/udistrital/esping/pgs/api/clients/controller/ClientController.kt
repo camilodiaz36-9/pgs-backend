@@ -44,7 +44,7 @@ class ClientController {
     }
 
     @GetMapping("/clients/{id}")
-    fun getClientById(id: Int): ResponseEntity<ClientDTO> {
+    fun getClientById(@PathVariable(required = true) id: Int): ResponseEntity<ClientDTO> {
         val response = clientService.getClientById(id)
         return ResponseEntity(response, HttpStatus.OK)
     }
