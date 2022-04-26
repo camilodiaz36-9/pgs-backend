@@ -21,13 +21,13 @@ class PetTypeController {
     @Autowired
     private lateinit var petTypeService: PetTypeService
 
-    @PostMapping("/petTypes")
+    @PostMapping("/petType")
     fun createPetType(@RequestBody petType: PetTypeDTO): ResponseEntity<PetTypeDTO> {
         val response = petTypeService.createPetType(petType)
         return ResponseEntity(response, HttpStatus.CREATED)
     }
 
-    @PutMapping("/petTypes/{id}")
+    @PutMapping("/petType/{id}")
     fun updatePetType(
         @RequestBody petType: PetTypeDTO,
         @PathVariable(required = true) id: Int
@@ -36,19 +36,19 @@ class PetTypeController {
         return ResponseEntity(response, HttpStatus.OK)
     }
 
-    @DeleteMapping("/petTypes/{id}")
+    @DeleteMapping("/petType/{id}")
     fun deletePetType(@PathVariable(required = true) id: Int): ResponseEntity<Any> {
         petTypeService.deletePetType(id)
         return ResponseEntity(null, HttpStatus.OK)
     }
 
-    @GetMapping("/petTypes/{id}")
+    @GetMapping("/petType/{id}")
     fun getPetTypeById(@PathVariable(required = true) id: Int): ResponseEntity<PetTypeDTO> {
         val response = petTypeService.getPetTypeById(id)
         return ResponseEntity(response, HttpStatus.OK)
     }
 
-    @GetMapping("/petTypes")
+    @GetMapping("/petType")
     fun getAllPetTypes(): ResponseEntity<List<PetTypeDTO>> {
         val response = petTypeService.getAllPetTypes()
         return ResponseEntity(response, HttpStatus.OK)
