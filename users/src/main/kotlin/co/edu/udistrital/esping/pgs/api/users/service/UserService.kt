@@ -1,7 +1,7 @@
 package co.edu.udistrital.esping.pgs.api.users.service
 
 import co.edu.udistrital.esping.pgs.api.users.dto.UserDTO
-import co.edu.udistrital.esping.pgs.api.users.model.LoginDTO
+import co.edu.udistrital.esping.pgs.api.users.dto.LoginDTO
 
 interface UserService {
     fun createUser(user: UserDTO): UserDTO

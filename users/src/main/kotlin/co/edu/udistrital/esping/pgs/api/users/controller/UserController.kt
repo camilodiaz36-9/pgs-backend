@@ -1,7 +1,7 @@
 package co.edu.udistrital.esping.pgs.api.users.controller
 
 import co.edu.udistrital.esping.pgs.api.users.dto.UserDTO
-import co.edu.udistrital.esping.pgs.api.users.model.LoginDTO
+import co.edu.udistrital.esping.pgs.api.users.dto.LoginDTO
 import co.edu.udistrital.esping.pgs.api.users.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -59,11 +59,9 @@ class UserController {
     fun login(@RequestBody login: LoginDTO): ResponseEntity<Any> {
         val response = userService.login(login)
 
-        return if(response != null){
-            println("Login exitoso")
+        return if(response != null) {
             ResponseEntity(response, HttpStatus.OK)
         } else {
-            println("Login fallido")
             ResponseEntity(null, HttpStatus.BAD_REQUEST)
         }
 

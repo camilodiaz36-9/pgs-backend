@@ -12,7 +12,6 @@ import javax.persistence.ManyToOne
 import javax.persistence.Table
 import java.time.Instant
 
-
 @Entity
 @Table(name = "clients")
 open class Client {

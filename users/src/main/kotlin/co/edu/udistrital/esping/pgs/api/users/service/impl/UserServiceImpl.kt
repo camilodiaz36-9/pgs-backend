@@ -1,7 +1,7 @@
 package co.edu.udistrital.esping.pgs.api.users.service.impl
 
 import co.edu.udistrital.esping.pgs.api.users.dto.UserDTO
-import co.edu.udistrital.esping.pgs.api.users.model.LoginDTO
+import co.edu.udistrital.esping.pgs.api.users.dto.LoginDTO
 import co.edu.udistrital.esping.pgs.api.users.model.User
 import co.edu.udistrital.esping.pgs.api.users.repository.UserRepository
 import co.edu.udistrital.esping.pgs.api.users.service.UserService
@@ -34,6 +34,7 @@ class UserServiceImpl : UserService {
             userEntity.login = user.login
             userEntity.phone = user.phone
             userEntity.address = user.address
+            userEntity.token = user.token
 
             val userUpdated = userRepository.save(userEntity)
 
@@ -88,8 +89,9 @@ class UserServiceImpl : UserService {
         val login = userEntity.login
         val phone = userEntity.phone
         val address = userEntity.address
+        val token = userEntity.token
 
-        return UserDTO(id, email, password, login, phone, address)
+        return UserDTO(id, email, password, login, phone, address, token)
     }
 
     private fun dtoToEntity(userDTO: UserDTO): User {
@@ -98,6 +100,7 @@ class UserServiceImpl : UserService {
         val login = userDTO.login
         val phone = userDTO.phone
         val address = userDTO.address
+        val token = userDTO.token
 
         val userEntity = User()
         userEntity.email = email
@@ -105,6 +108,7 @@ class UserServiceImpl : UserService {
         userEntity.login = login
         userEntity.phone = phone
         userEntity.address = address
+        userEntity.token = token
 
         return userEntity
     }

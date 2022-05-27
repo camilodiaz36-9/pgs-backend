@@ -56,15 +56,10 @@ class ClientServiceImpl : ClientService {
     }
 
     override fun getClientById(id: Int): ClientDTO? {
-        val foundClient = clientRepository.findById(id)
-
-        return if (foundClient.isPresent) {
-            val clientEntity = foundClient.get()
-            entityToDTO(clientEntity)
-        } else {
-            null
-        }
-
+        val user = User()
+        user.id = id
+        val foundClient = clientRepository.findByUser(user)
+        return entityToDTO(foundClient)
     }
 
     override fun getAllClients(): List<ClientDTO> {
